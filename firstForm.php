@@ -22,22 +22,33 @@ $fieldset = $form->addElement('fieldset')
 /**
  * Добавить поле типа Текст
  */
-$fieldset->addElement('text', 'name-for-Jon', array('size' => 50, 'maxlength' => 255))
-         ->setLabel('Enter your name:');
+$name = $fieldset->addElement('text', 'name', array('size' => 50, 'maxlength' => 255));
+$name->setLabel('Enter your name:');
 
 /**
  * Добавить кнопку
  */
 $fieldset->addElement('submit', 'send', array('value' => 'Send!'));
 
-
 /**
  * Отправить форму на страницу
  */
 echo $form;
 
-if (isset($_POST)) {
-    foreach($_POST as $key=>$val) {
-        echo "$key=>$val<br>";
-    }
+/**
+ * Удалить лишние пробелы вначале и в конце
+ */
+$name->addFilter('trim');
+
+/**
+ * Задать правила валидации
+ */
+$name->addRule('required', 'Please enter your name');
+
+if ($form->validate()) {
+    echo '<h1>Hello, ' . htmlspecialchars($name->getValue()) . '!</h1>';
+} else {
+    echo 'Валидация не прошла';
 }
+
+
